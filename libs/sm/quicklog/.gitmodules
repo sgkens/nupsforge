@@ -1,8 +1,0 @@
-[submodule "libs/submodules/propture"]
-	path = libs/submodules/propture
-	url = https://gitlab.snowlab.tk/powershell/propture.git
-	branch = main
-[submodule "libs/submodules/powerunicode"]
-	path = libs/submodules/powerunicode
-	url = https://gitlab.snowlab.tk/powershell/powerunicode.git
-	branch = main

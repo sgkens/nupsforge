@@ -9,10 +9,10 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = '$PSScriptroot/NuPSForge.psm1'
+RootModule = 'nupsforge.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.0.0'
+ModuleVersion     = '0.1.0.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -21,13 +21,13 @@ ModuleVersion = '0.1.0.0'
 GUID = '66c5e2d6-3737-44d7-a0e8-344983d18b36'
 
 # Author of this module
-Author = 'sgkens / sgkenspsstack'
+Author = 'sgkens'
 
 # Company or vendor of this module
-CompanyName = 'sgkenspsstack'
+CompanyName = 'davilion'
 
 # Copyright statement for this module
-Copyright = '2023 sgkenspsstack. All rights reserved.'
+Copyright = '2023 Garvey k. Snow All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'NuPSForge is a powershell module to help with the creation of .nupkg for powershell modules and scripts, for deployment to a nuget repositories.'
@@ -69,16 +69,16 @@ PowerShellVersion = '7.3.4'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = '*'
+FunctionsToExport = 'New-NupkgPacakge','New-NupkgPacakgeFile'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = '*'
+CmdletsToExport = 'New-NupkgPacakge','New-NupkgPacakgeFile'
 
 # Variables to export from this module
-VariablesToExport = '*'
+VariablesToExport = ''
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+AliasesToExport = ''
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -95,7 +95,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'automation'
+        Tags = 'automation','nupsec','nupkg', 'nuget'
 
         # A URL to the license for this module.
         LicenseUri = 'https://choosealicense.com/licenses/mit'
@@ -110,7 +110,7 @@ PrivateData = @{
         ReleaseNotes = 'https://gitlab.snowlab.tk/powershell/NuPSForge/-/blob/main/Releases.md'
 
         # Prerelease string of this module
-        Prerelease = 'alpha1'
+        # Prerelease = 'alpha1'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false

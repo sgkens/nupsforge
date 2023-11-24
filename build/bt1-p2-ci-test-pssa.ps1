@@ -1,0 +1,1 @@
+Invoke-ScriptAnalyzer -Path .\dist\nupsforge -Recurse -severity warning -excluderule PSUseBOMForUnicodeEncodedFile,PSAvoidUsingWriteHost

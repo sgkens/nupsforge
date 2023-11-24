@@ -1,4 +1,4 @@
-using module ..\..\quicklog\quicklog.psm1
+using module ..\..\logtastic\logtastic.psm1
 <#  -------------------------------------------------------------------------------------------------------
 /** ******************************************************************************************************* 
 #!   NAME--------: New-NuspecPacakgeFile Function
@@ -37,7 +37,7 @@ function New-NuspecPacakgeFile {
         [string]$releasenotes
     )
 
-    Write-QLMessage -Message "Generating @{pt:{module=$ModuleName}} @{pt:{package=$company`.$ModuleName}}" -Name "nsf" -Type "action"
+    Write-LogTastic -Message "Generating @{pt:{module=$ModuleName}} @{pt:{package=$company`.$ModuleName}}" -Name "nsf" -Type "action"
     try{
 
     # XML Here-String .nuspec file template for powershell modules 
@@ -88,21 +88,21 @@ function New-NuspecPacakgeFile {
   </files>
 </package>
 "@
-    Write-QLMessage -Message "Done" -Name "nsf" -Type "success" -submessage
+    Write-LogTastic -Message "Done" -Name "nsf" -Type "success" -submessage
 }
 catch [System.Exception] {
-    Write-QLMessage -Message "[NuspecPackageFile] Template Create Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name "nsf" -Type "error"
+    Write-LogTastic -Message "[NuspecPackageFile] Template Create Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name "nsf" -Type "error"
 }
-    Write-QLMessage -Message "Creating File Manifest" -Name "nsf" -Type "Info"
-    Write-QLMessage -Message "Adding files to manifest to @{pt:{xmlNodePath=nuspec.package.files.file}}" -Name "nsf" -Type "action" -Submessage
+    Write-LogTastic -Message "Creating File Manifest" -Name "nsf" -Type "Info"
+    Write-LogTastic -Message "Adding files to manifest to @{pt:{xmlNodePath=nuspec.package.files.file}}" -Name "nsf" -Type "action" -Submessage
     #! check for readme.txt and icon.png 
     # Update and add all files to the manifest
     try{
-        Write-QLMessage -Message "Getting Directory Property" -Name "nsf" -Type "Info" -Submessage
+        Write-LogTastic -Message "Getting Directory Property" -Name "nsf" -Type "Info" -Submessage
         $DirectoryProperty = Get-itemProperty -Path $path
     }
     catch [System.Exception] {
-        Write-QLMessage -Message "Get-ItemProperty Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name "nsf" -Type "error"
+        Write-LogTastic -Message "Get-ItemProperty Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name "nsf" -Type "error"
         return
     }
 
@@ -114,19 +114,19 @@ catch [System.Exception] {
             try{
                 # replace souce path with empty string to get relative path 
                 if($_.name -match "(i|I)(con.png)") {
-                    Write-QLMessage -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name "nsf" -Type "complete" -Submessage
+                    Write-LogTastic -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name "nsf" -Type "complete" -Submessage
                     # add readme.txt and icon.png to the root of the package as default requirements
                     $fileElement = $nuspec.CreateElement("file")
                     $fileElement.SetAttribute("target", $RelativePath)
                     $fileElement.SetAttribute("src", $RelativePath)
                 }elseif($_.name -match "(r|R)(eadme.txt)"){
-                    Write-QLMessage -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name "nsf" -Type "complete" -Submessage
+                    Write-LogTastic -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name "nsf" -Type "complete" -Submessage
                     # add readme.txt and icon.png to the root of the package as default requirements
                     $fileElement = $nuspec.CreateElement("file")
                     $fileElement.SetAttribute("target", $RelativePath)
                     $fileElement.SetAttribute("src", $RelativePath)                  
                 }else{
-                    Write-QLMessage -Message "@{pt:{path=$RelativePath}}" -Name "nsf" -Type "complete" -Submessage
+                    Write-LogTastic -Message "@{pt:{path=$RelativePath}}" -Name "nsf" -Type "complete" -Submessage
                     # Add files to the manifest in root path
                     $fileElement = $nuspec.CreateElement("file")
                     $fileElement.SetAttribute("target", $RelativePath)
@@ -136,29 +136,29 @@ catch [System.Exception] {
                 $nuspec.SelectSingleNode("//files").AppendChild($fileElement) | Out-Null
             }
             catch [System.Exception] {
-                Write-QLMessage -Message "Get-ItemProperty Failed Error: $($_.Exception.Message) " -Name "nsf" -Type "error"
+                Write-LogTastic -Message "Get-ItemProperty Failed Error: $($_.Exception.Message) " -Name "nsf" -Type "error"
                 #break;
             }
         }
     }
-    Write-QLMessage -Message "Finished." -Name "nsf" -Type "complete" -Submessage
+    Write-LogTastic -Message "Finished." -Name "nsf" -Type "complete" -Submessage
     
     # Add dependancies to the manifest
     # xmlnode nuspec.package.metadata.dependencies.dependency
     if($dependencies.Count -ne 0){
         try{
-            Write-QLMessage -Message "Adding dependancies to manifest @{pt:{xmlNodePath=nuspec.package.metadata.dependencies.dependency}}" -Name "nsf" -Type "action"
+            Write-LogTastic -Message "Adding dependancies to manifest @{pt:{xmlNodePath=nuspec.package.metadata.dependencies.dependency}}" -Name "nsf" -Type "action"
             foreach($dependency in $dependencies){
-                Write-QLMessage -Message "Dependency > @{pt:{Name=$($dependency.id)}} @{pt:{Version=$($dependency.version)}}" -Name "nsf" -Type "Action" -Submessage
+                Write-LogTastic -Message "Dependency > @{pt:{Name=$($dependency.id)}} @{pt:{Version=$($dependency.version)}}" -Name "nsf" -Type "Action" -Submessage
                 $dependencyElement = $nuspec.CreateElement("dependency")
                 $dependencyElement.SetAttribute("id", $dependency.id)
                 $dependencyElement.SetAttribute("version", $dependency.version)
                 $nuspec.SelectSingleNode("//dependencies").AppendChild($dependencyElement) | Out-Null
             }
-            Write-QLMessage -Message "Done." -Name "nsf" -Type "success" -Submessage
+            Write-LogTastic -Message "Done." -Name "nsf" -Type "success" -Submessage
         }
         catch [system.exception] {
-            Write-QLMessage -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name "nsf" -Type "Error" -Submessage
+            Write-LogTastic -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name "nsf" -Type "Error" -Submessage
         }
     }
 
@@ -169,13 +169,14 @@ catch [System.Exception] {
 
     # output the nuspec file
     try{
-        Write-QLMessage -Message "Exporting .nuspec @{pt:{File=$outpath\$company`.$modulename`.nuspec}}" -Name "nsf" -Type "action"
+        Write-LogTastic -Message "Exporting .nuspec @{pt:{File=$outpath\$company`.$modulename`.nuspec}}" -Name "nsf" -Type "action"
         $nuspec.Save("$path\$ModuleName`.nuspec")
-        Write-QLMessage -Message "Exported" -Name "nsf" -Type "Complete"
-        Write-QLMessage -Message "@{pt:{Path=$PWD`\$company`.$modulename`.nuspec}}" -Name "nsf" -Type "info" -Submessage
+        Write-LogTastic -Message "Exported" -Name "nsf" -Type "Complete"
+        Write-LogTastic -Message "@{pt:{Path=$PWD`\$company`.$modulename`.nuspec}}" -Name "nsf" -Type "info" -Submessage
     }
     catch [system.exception] {
-        Write-QLMessage -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name "nsf" -Type "Error" -Submessage
+        Write-LogTastic -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name "nsf" -Type "Error" -Submessage
     }
     
 }
+Export-modulemember -function New-NuspecPacakgeFile

@@ -12,4 +12,4 @@ using module .\New-NupkgPacakge.psm1
 #                         -Tags "PowerShell, Module, automation, nupkg, build" `
 #                         -dependencies @{id="bitstransfer";version="1.2.3"},@{id="quicklog";version="1.2.3"}`
 
-New-NupkgPacakge -path .\testpackage  -outpath .\testpackage
+New-NupkgPacakge -path .\  -outpath .\dist
