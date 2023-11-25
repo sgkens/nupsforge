@@ -4,7 +4,7 @@
 RootModule    = 'nupsforge.psm1'
 
 # Version number of this module.
-ModuleVersion     = '0.2.0.0'
+ModuleVersion     = '0.2.1.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -43,7 +43,7 @@ PowerShellVersion = '7.3.4'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @()
+RequiredModules = @("logtastic","tadpol")
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -58,13 +58,13 @@ PowerShellVersion = '7.3.4'
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-# NestedModules = @("Logtastic")
+#NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'New-NupkgPacakge','New-NupkgPacakgeFile'
+FunctionsToExport = 'New-NupkgPacakge', 'New-NuspecPacakgeFile'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = 'New-NupkgPacakge','New-NupkgPacakgeFile'
+CmdletsToExport = 'New-NupkgPacakge', 'New-NuspecPacakgeFile'
 
 # Variables to export from this module
 VariablesToExport = ''
