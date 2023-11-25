@@ -1,5 +1,3 @@
-using module .\logtastic\libs\cmdlets\Write-LogTastic.psm1
-using module ..\..\tadpol\tadpol.psm1
 <#
      _____ __         ________             __  
     / ___// /_  ___  / / / __ \____  _____/ /__
@@ -113,6 +111,8 @@ Function New-ShellDock(){
     }
 }
 Export-Modulemember -Function New-ShellDock
+
+
 # # $scriptblock = {
 # #     cmd /c ping -n 10 $args
 # # }
