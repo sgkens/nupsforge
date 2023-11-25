@@ -1,5 +1,4 @@
-using module ..\libs\New-NuspecPacakgeFile.psm1
-using module ..\libs\New-NupkgPacakge.psm1
+import-module -name .\
 
 # ? Powershell Gallery Description Does not support markdown indenting
 # ? But Nuget and Choco Does
