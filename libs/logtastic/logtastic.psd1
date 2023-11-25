@@ -1,7 +1,7 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule    = 'nupsforge.psm1'
+RootModule = 'logtastic.psm1'
 
 # Version number of this module.
 ModuleVersion     = '0.2.0.0'
@@ -10,22 +10,26 @@ ModuleVersion     = '0.2.0.0'
 # CompatiblePSEditions = @()
 
 # ID used to uniquely identify this module
-GUID = '66c5e2d6-3737-44d7-a0e8-344983d18b36'
+GUID = '9d70e476-0214-4644-aaf6-cb4fadc1116c'
 
 # Author of this module
-Author = 'sgkens'
+Author = 'Garvey k. Snow'
 
 # Company or vendor of this module
 CompanyName = 'davilion'
 
 # Copyright statement for this module
-Copyright = '2023 Garvey k. Snow All rights reserved.'
+Copyright   = '2023 @ Garvey k. Snow. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'NuPSForge is a powershell module to help with the creation of .nupkg for powershell modules and scripts, for deployment to a nuget repositories.'
+Description = @"
+LogTastic is a PowerShell Module that outputs styled log message to the console. 
+It is designed to be used in conjunction with other PowerShell modules to provide a consistent 
+look and feel to the console output.
+"@
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '7.3.4'
+PowerShellVersion = '5.1'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -58,25 +62,31 @@ PowerShellVersion = '7.3.4'
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-# NestedModules = @("Logtastic")
+# NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'New-NupkgPacakge','New-NupkgPacakgeFile'
+FunctionsToExport = 'Write-LogTastic',
+                    'Get-LogTasticModuleInstance',
+                    'Write-LogTasticProgress',
+                    'New-Logtastic'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = 'New-NupkgPacakge','New-NupkgPacakgeFile'
+CmdletsToExport = 'Write-LogTastic',
+                  'Get-LogTasticModuleInstance',
+                  'Write-LogTasticProgress',
+                  'New-LogTastic'
 
 # Variables to export from this module
 VariablesToExport = ''
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = ''
+AliasesToExport = 'lt','nlt'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
 
 # List of all modules packaged with this module
-# ModuleList    = @()
+# ModuleList = @()
 
 # List of all files packaged with this module
 # FileList = @()
@@ -87,19 +97,19 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'automation','nupsec','nupkg', 'nuget'
+        Tags = 'message','log, logging, module, freeware, powershell-core, cross-platform, progressbars, console','unicode', 'emoji', 'icons', 'icons-in-console', 'icons-in-powershell'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://choosealicense.com/licenses/mit'
+        LicenseUri = "https://choosealicense.com/licenses/mit"
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://gitlab.snowlab.tk/powershell/NuPSForge.git'
+        ProjectUri = 'https://gitlab.snowlab.tk/powershell/logtastic.git'
 
         # A URL to an icon representing this module.
-        IconUri = 'https://gitlab.snowlab.tk/powershell/NuPSForge/-/blob/main/logo.svg'
+        IconUri = 'https://gitlab.snowlab.tk/powershell/logtastic/-/blob/main/logo.svg'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'https://gitlab.snowlab.tk/powershell/NuPSForge/-/blob/main/Releases.md'
+        ReleaseNotes = 'https://gitlab.snowlab.tk/powershell/logtastic/-/blob/main/Releases.md'
 
         # Prerelease string of this module
         # Prerelease = 'alpha1'

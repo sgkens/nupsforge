@@ -1,0 +1,109 @@
+{
+  "utfeprops": [
+    {
+      "id": "Complete",
+      "name": "Complete",
+      "Unicode": "#2705",
+      "Description": "Success log Message Icon",
+      "emoji": "✅"
+    },
+    {
+      "id": "Success",
+      "name": "Success",
+      "Unicode": "#1F7E2",
+      "Description": "Success log Message Icon",
+      "emoji": "🟢"
+    },
+    {
+      "id": "Error",
+      "name": "Error",
+      "Unicode": "#2753",
+      "Description": "Error log Message Icon",
+      "emoji": "❓"
+    },
+    {
+      "id": "Error2",
+      "name": "Error2",
+      "Unicode": "#2757",
+      "Description": "Error2 log Message Icon",
+      "emoji": "❗"
+    },
+    {
+      "id": "info",
+      "name": "info",
+      "Unicode": "#1F9FE",
+      "Description": "Info log Message Icon",
+      "emoji": "🧾"
+    },
+    {
+      "id": "action",
+      "name": "action",
+      "Unicode": "#1F4A6",
+      "Description": "action log Message Icon",
+      "emoji": "💦"
+    },
+    {
+      "id": "request",
+      "name": "request",
+      "Unicode": "#1F310",
+      "Description": "request log Message Icon",
+      "emoji": "🌐"
+    },
+    {
+      "id": "response",
+      "name": "response",
+      "Unicode": "#1F311",
+      "Description": "response log Message Icon",
+      "emoji": "🌑"
+    },
+    {
+      "id": "seperator",
+      "name": "seperator",
+      "Unicode": "#1F4A0",
+      "Description": "Miscellaneous symbol",
+      "emoji": "💠"
+    },
+    {
+      "id": "logpointer",
+      "name": "logpointer",
+      "Unicode": "#2771",
+      "Description": "Before log message text",
+      "emoji": "❱"
+    },
+    {
+      "id": "logtime",
+      "name": "logtime",
+      "Unicode": "#23F0",
+      "Description": "Used for log datetime inbetween logname and datetime",
+      "emoji": "⏰"
+    },
+    {
+      "id": "download",
+      "name": "download",
+      "Unicode": "#1F4E5",
+      "Description": "Download",
+      "emoji": "📥"
+    },
+    {
+      "id": "actiondownload",
+      "name": "actiondownload",
+      "Unicode": "#1F300",
+      "Description": "Used with the Write-LogtasticProgress function to show progress of a download",
+      "emoji": "🌀"
+    },
+    {
+      "id": "upload",
+      "name": "upload",
+      "Unicode": "#1F4E4",
+      "Description": "Used for upload purposes",
+      "emoji": "📤"
+    },
+    {
+      "id": "submessage",
+      "name": "submessage",
+      "Unicode": "#21AA",
+      "Description": "Used to denote a submessage",
+      "emoji": "↪"
+    }
+  ]
+}

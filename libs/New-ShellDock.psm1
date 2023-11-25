@@ -1,4 +1,4 @@
-using module ..\..\logtastic\logtastic.psm1
+using module .\logtastic\libs\cmdlets\Write-LogTastic.psm1
 using module ..\..\tadpol\tadpol.psm1
 <#
      _____ __         ________             __  

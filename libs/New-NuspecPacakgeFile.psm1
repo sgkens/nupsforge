@@ -1,4 +1,5 @@
-using module ..\..\logtastic\logtastic.psm1
+using module .\libs\logtastic\logtastic.psm1
+using module .\New-shelldock.psm1
 <#  -------------------------------------------------------------------------------------------------------
 /** ******************************************************************************************************* 
 #!   NAME--------: New-NuspecPacakgeFile Function
