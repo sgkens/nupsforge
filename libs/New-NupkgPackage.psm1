@@ -1,14 +1,14 @@
 using module ..\libs\shelldock\New-ShellDock.psm1
 <#  -------------------------------------------------------------------------------------------------------
 /** ******************************************************************************************************* 
-#!   NAME--------: New-NuspecPacakge Function
+#!   NAME--------: New-NupkgPackage Function
 ##   AUTHER------: snoonx | nytscripts
 #?   DESCRIPTION-: Creates .nupkg package from .nuspec file and outputs to $outpath.  
 *?   DEPENDANCIES: quicklog 
 ##   BUILD ENV---: BUILD: Powershellcore 7.3.1
 *?   LICENCE-----: MIT
 ** ******************************************************************************************************#>
-Function New-NupkgPacakge() {
+Function New-NupkgPackage() {
     #create nupkg package from nuspec file
     [CmdletBinding()]
     param(
@@ -60,4 +60,4 @@ Function New-NupkgPacakge() {
     Write-LogTastic -Message "@{pt:{package=$exportPath`\$($nuspecfile.package.metadata.id)`.nupkg}}" -Name "pmm" -Type "Complete" -Submessage
     Write-LogTastic -Message "Complete" -Name "pmm" -Type "Complete"
 }
-Export-ModuleMember -Function New-NupkgPacakge
+Export-ModuleMember -Function New-NupkgPackage

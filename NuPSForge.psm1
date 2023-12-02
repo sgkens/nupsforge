@@ -1,4 +1,4 @@
-using module libs\New-NuspecPacakgeFile.psm1
-using module libs\New-NupkgPacakge.psm1
+using module libs\New-NuspecPackageFile.psm1
+using module libs\New-NupkgPackage.psm1
 
-Export-ModuleMember -Function New-NuspecPacakgeFile, New-NupkgPacakge, New-ShellDock
+Export-ModuleMember -Function New-NuspecPackageFile, New-NupkgPackage

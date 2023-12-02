@@ -1,14 +1,14 @@
 using module ..\libs\shelldock\New-ShellDock.psm1
 <#  -------------------------------------------------------------------------------------------------------
 /** ******************************************************************************************************* 
-#!   NAME--------: New-NuspecPacakgeFile Function
+#!   NAME--------: New-NuspecPackageFile Function
 ##   AUTHER------: snoonx | psshellstack
 #?   DESCRIPTION-: Creates a new nuspec manifest file for powershell module/nuspec package.      
 *?   DEPENDANCIES: quicklog
 ##   BUILD ENV---: BUILD: Powershellcore 7.3.1
 *?   LICENCE-----: MIT 
 ** ******************************************************************************************************#>
-function New-NuspecPacakgeFile {
+function New-NuspecPackageFile {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -24,7 +24,7 @@ function New-NuspecPacakgeFile {
         [Parameter(Mandatory = $true)]
         [string]$ProjectUrl,
         [Parameter(Mandatory = $false)]
-        [string]$iconUrl,
+        [string]$IconUrl,
         [Parameter(Mandatory = $true)]
         [string]$License,
         [Parameter(Mandatory = $true)]
@@ -72,7 +72,7 @@ function New-NuspecPacakgeFile {
     <tags>$Tags</tags>
     <!-- Icon is used in Visual Studio's package manager UI -->
     <icon>icon.png</icon>
-    <iconurl>$iconurl</iconurl>
+    <iconUrl>$iconUrl</iconUrl>
     <!-- 
         If true, this value prompts the user to accept the license when
         installing the package. 
@@ -182,4 +182,4 @@ catch [System.Exception] {
     }
     
 }
-Export-modulemember -function New-NuspecPacakgeFile
+Export-modulemember -function New-NuspecPackageFile
