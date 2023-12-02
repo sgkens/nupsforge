@@ -23,6 +23,8 @@ function New-NuspecPacakgeFile {
         [string]$Description,
         [Parameter(Mandatory = $true)]
         [string]$ProjectUrl,
+        [Parameter(Mandatory = $false)]
+        [string]$iconUrl,
         [Parameter(Mandatory = $true)]
         [string]$License,
         [Parameter(Mandatory = $true)]
@@ -70,6 +72,7 @@ function New-NuspecPacakgeFile {
     <tags>$Tags</tags>
     <!-- Icon is used in Visual Studio's package manager UI -->
     <icon>icon.png</icon>
+    <iconurl>$iconurl</iconurl>
     <!-- 
         If true, this value prompts the user to accept the license when
         installing the package. 
