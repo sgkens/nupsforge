@@ -1,14 +1,14 @@
-using module ..\libs\shelldock\New-ShellDock.psm1
+using module ..\shelldock\New-ShellDock.psm1
 <#  -------------------------------------------------------------------------------------------------------
 /** ******************************************************************************************************* 
-#!   NAME--------: New-NupkgPackage Function
+#!   NAME--------: New-ChocoPackage Function
 ##   AUTHER------: snoonx | nytscripts
 #?   DESCRIPTION-: Creates .nupkg package from .nuspec file and outputs to $outpath.  
 *?   DEPENDANCIES: quicklog 
 ##   BUILD ENV---: BUILD: Powershellcore 7.3.1
 *?   LICENCE-----: MIT
 ** ******************************************************************************************************#>
-Function New-NupkgPackage() {
+Function New-ChocoPackage() {
     #create nupkg package from nuspec file
     [CmdletBinding()]
     param(
@@ -26,32 +26,32 @@ Function New-NupkgPackage() {
         if ((Get-ChildItem $Path -Filter "*.nuspec").count -eq 0 ) { throw [System.Exception] "No nuspec file found in $rootpath"; }
         elseif ((Get-ChildItem $Path -Filter "*.nuspec").count -gt 1 ) { throw [System.Exception] "More than one nuspec file found in $rootpath"; }
         
-        if(!([xml]$nuspecfile = Get-Content -Path "$rootpath\*.nuspec")){
-            throw [System.Exception]::new("Failed to read nuspec file $rootpath\*.nuspec","nuget.ex not function PATH System variable"); 
+        if (!([xml]$nuspecfile = Get-Content -Path "$rootpath\*.nuspec")) {
+            throw [System.Exception]::new("Failed to read nuspec file $rootpath\*.nuspec", "nuget.ex not function PATH System variable"); 
 
             break;
         }
         Write-LogTastic -Message "[{ct:magenta:nuget}]|-@{pt:{run=pack}} @{pt:{Package=$($nuspecfile.package.metadata.id)}} @{pt:{Version=$($nuspecfile.package.metadata.version)}}" -Name "pmm" -Type "action"
         Write-LogTastic -Message "Creating {ct:magenta:nupkg} package from {ct:magenta:nuspec} file" -Name "pmm" -Type "action" -Submessage      
         Write-LogTastic -Message "Checking {ct:yellow:nuget} Package Manager" -Name "pmm" -Type "info" -Submessage
-
-
-        $nuget = Get-Command -Name nuget -ErrorAction SilentlyContinue
-        if ($nuget.source.length -eq 0) { 
-            throw [System.Exception]::new("Nuget package manager not found @{pt:{DownloadFrom=https://www.nuget.org/downloads}}","nuget.ex not function PATH System variable"); 
-        }
-        Write-LogTastic -Message "Done" -Name "pmm" -Type "complete" -Submessage
     }
-    catch [System.Exception]{
+    catch [System.Exception] {
         Write-LogTastic -Message "$($_.Exception.Message)" -Name "pmm" -Type "Error" -submessage
     }
-    Write-LogTastic -Message "[{ct:green:PackPackage}]" -Name "pmm" -Type "action" -submessage
-
-    $timer = [PSObject]@{count = 10 }
-
-    New-ShellDock -Ql -ScriptBlock {
-        nuget pack -build $args.rootpath -OutputDirectory $args.exportPath
-    } -Arguments ([PSObject]@{rootpath=$rootpath; exportPath=$exportPath})
+    Write-LogTastic -Message "[{ct:green:Choco-Package-Creator}]" -Name "pmm" -Type "action" -submessage
+    $PackageName = "$(($nuspecfile.package.metadata.id)).$($nuspecfile.package.metadata.version).nupkg"
+    Compress-Archive -Path $rootpath `
+                     -DestinationPath "$exportPath\$PackageName" `
+                     -compressionlevel optimal `
+                     -update `
+                     -Verbose
+    # New-ShellDock -Ql -ScriptBlock {
+    #     Compress-Archive -Path $args.rootpath 
+    #                      -destinationpath "$($args.exportPath)\dist\psgal\$zipFileName"
+    #                      -compressionlevel optimal 
+    #                      -update
+    #                      -Verbose
+    # } -Arguments ([PSObject]@{rootpath = $rootpath; exportPath = $exportPath })
 
     # - TotalProcessorTime : 00:00:00.6250000
     # - id : 26036
@@ -60,4 +60,4 @@ Function New-NupkgPackage() {
     Write-LogTastic -Message "@{pt:{package=$exportPath`\$($nuspecfile.package.metadata.id)`.nupkg}}" -Name "pmm" -Type "Complete" -Submessage
     Write-LogTastic -Message "Complete" -Name "pmm" -Type "Complete"
 }
-Export-ModuleMember -Function New-NupkgPackage
+Export-ModuleMember -Function New-ChocoPackage

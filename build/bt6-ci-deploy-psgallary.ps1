@@ -5,7 +5,7 @@
   publish-Module `
     -path ".\dist\$modulename" `
     -Repository $ProGet_PSGalInstance `
-    -NuGetApiKey $apikey `
+    -NuGetApiKey $PSGAL_API_KEY `
     -projecturi $ModuleManifest.ProjectUri `
     -licenseuri $ModuleManifest.LicenseUri `
     -IconUri 'https://gitlab.snowlab.tk/sgkens/resources/-/blob/raw/modules/CommitFusion/dist/v1/ccommits-logo_GitIcon_51.20dpi.png' `

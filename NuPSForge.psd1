@@ -4,7 +4,7 @@
 RootModule    = 'nupsforge.psm1'
 
 # Version number of this module.
-ModuleVersion     = '0.2.3.0'
+ModuleVersion     = '0.3.0.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -22,7 +22,7 @@ CompanyName = 'davilion'
 Copyright = '2023 Garvey k. Snow All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'NuPSForge is a powershell module to help with the creation of .nupkg for powershell modules and scripts, for deployment to a nuget repositories.'
+Description = 'NuPSForge is a powershell module to help with the creation of .nupkg for powershell modules and scripts, for deployment to a nuget repositories, such as the **Powershell Gallary**,**Chocolatey**, *proget* , and **Gitlab|Github Packages**'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '7.3.4'
@@ -61,10 +61,10 @@ RequiredModules = @("logtastic","tadpol")
 #NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'New-NupkgPackage', 'New-NuspecPackageFile'
+FunctionsToExport = 'New-NupkgPackage', 'New-NuspecPackageFile', 'New-ChocoPackage', 'New-ChocoNuspecFile'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = 'New-NupkgPackage', 'New-NuspecPackageFile'
+CmdletsToExport = 'New-NupkgPackage', 'New-NuspecPackageFile', 'New-ChocoPackage', 'New-ChocoNuspecFile'
 
 # Variables to export from this module
 VariablesToExport = ''
@@ -87,19 +87,19 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'automation','nupsec','nupkg', 'nuget'
+        Tags = 'automation','nupsec','nupkg', 'nuget','nuget-create','package-create','package-create-nupkg','powershell','powershell-core','module'
 
         # A URL to the license for this module.
         LicenseUri = 'https://choosealicense.com/licenses/mit'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://gitlab.snowlab.tk/powershell/NuPSForge.git'
+        ProjectUri = 'https://gitlab.com/sgkens/powershell/NuPSForge.git'
 
         # A URL to an icon representing this module.
-        IconUri = 'https://gitlab.snowlab.tk/powershell/NuPSForge/-/blob/main/logo.svg'
+        IconUri = 'https://gitlab.com/sgkens/NuPSForge/-/blob/main/logo.svg'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'https://gitlab.snowlab.tk/powershell/NuPSForge/-/blob/main/Releases.md'
+        ReleaseNotes = 'https://gitlab.com/sgkens/NuPSForge/-/blob/main/Releases.md'
 
         # Prerelease string of this module
         # Prerelease = 'alpha1'
@@ -109,6 +109,21 @@ PrivateData = @{
 
         # External dependent modules of this module
         # ExternalModuleDependencies = @()
+
+        # DocsURL
+        DocsURi = 'https://pages.gitlab.io/sgkens/NuPSForge/'
+
+        # MailingListUrl
+        MailingListUri = ''
+        
+        # bugTrackerUrl 
+        bugTrackerUri = ''
+
+        # packageSourceUrl
+        packageSourceUri = 'https://gitlab.snowlab.tk/powershell/NuPSForge/-/packages'
+
+        # Summary
+        Summary = 'NuPSForge is a powershell module to help with the creation of .nupkg for powershell modules and scripts, for deployment to nuget package repositories'
 
     } # End of PSData hashtable
 

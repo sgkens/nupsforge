@@ -1,6 +1,5 @@
 # --[ CONFIG ] 
 
-$apikey               = "c47b5f976dfaf9275d0bbbb7b671c81b78a70ff0"
 $ModuleName           = "nupsforge"
 $ProGet_chocInstance  = "https://proget.lab.davilion.online/nuget/Choco"
 $ProGet_nugetInstace  = "https://proget.lab.davilion.online/nuget/nuget"
@@ -22,7 +21,7 @@ if($ModuleManifest){
   if(Get-command choco){
     write-host "Checking if Chocolatey is installed, skipping install"
     write-host "Pushing to chocolatey: .\dist\choco\$nupkgFileName"
-    choco push ".\dist\choco\$nupkgFileName" --source $ProGet_chocInstance --apikey $apikey
+    choco push ".\dist\choco\$nupkgFileName" --source $ProGet_chocInstance --apikey $CHOCO_API_KEY
     write-host "Pushed to chocolatey $nupkgFileName - Complete"
   }
   else{
@@ -34,7 +33,7 @@ if($ModuleManifest){
   if(Get-command nuget.exe){
     write-host "Checking if Nuget is installed, skipping install"
     write-host "Pushing to Nuget: .\dist\nuget\$nupkgFileName"
-    nuget push ".\dist\nuget\$nupkgFileName" -source $ProGet_nugetInstace -apikey $apikey
+    nuget push ".\dist\nuget\$nupkgFileName" -source $ProGet_nugetInstace -apikey $CHOCO_API_KEY
     write-host "Pushed to Nuget $nupkgFileName - Complete"
   }
   else{

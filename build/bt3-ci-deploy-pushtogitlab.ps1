@@ -1,7 +1,6 @@
 # ---[ CONFIG ]
 
 $ModuleName = "nupsforge"
-$GITLAB_NUGET_PROJECT_TOKEN = 'QuKeQXyos8vHSpGzT6rE'
 $Gitlab_Username = "sgkens"
 $Gitlab_uri = "https://gitlab.lab.davilion.online"
 $projectid = "183"
@@ -14,7 +13,7 @@ $NugetProjectPath = "api/v4/projects/$projectid/packages/nuget/index.json"
 
 try {
   Write-host -foregroundcolor yellow "Attempting to Register Gitlab: $gitlab_uri@$Gitlab_Username"
-  dotnet nuget add source $gitlab_uri/$NugetProjectPath --name gitlab --username $GitLab_Username --password $GITLAB_NUGET_PROJECT_TOKEN
+  dotnet nuget add source $gitlab_uri/$NugetProjectPath --name gitlab --username $GitLab_Username --password $GITLAB_API_KEY
   Write-host -foregroundcolor green "Complete"
 }
 catch [system.exception] {
