@@ -4,7 +4,7 @@
 RootModule    = 'nupsforge.psm1'
 
 # Version number of this module.
-ModuleVersion     = '0.3.0.0'
+ModuleVersion     = '0.4.0.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -13,7 +13,7 @@ ModuleVersion     = '0.3.0.0'
 GUID = '66c5e2d6-3737-44d7-a0e8-344983d18b36'
 
 # Author of this module
-Author = 'sgkens'
+Author = 'Garvey k. Snow'
 
 # Company or vendor of this module
 CompanyName = 'davilion'
@@ -22,10 +22,10 @@ CompanyName = 'davilion'
 Copyright = '2023 Garvey k. Snow All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'NuPSForge is a powershell module to help with the creation of .nupkg for powershell modules and scripts, for deployment to a nuget repositories, such as the **Powershell Gallary**,**Chocolatey**, *proget* , and **Gitlab|Github Packages**'
+Description = 'NuPSForge is a powershell module to help with the creation of .nupkg for powershell modules and scripts, for deployment to a nuget repositories'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '7.3.4'
+PowerShellVersion = '7.0.0'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -43,7 +43,7 @@ PowerShellVersion = '7.3.4'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @("logtastic","tadpol")
+RequiredModules = "logtastic", "tadpol"
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -93,13 +93,13 @@ PrivateData = @{
         LicenseUri = 'https://choosealicense.com/licenses/mit'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://gitlab.com/sgkens/powershell/NuPSForge.git'
+        ProjectUri = 'https://github.com/sgkens/nupsforge'
 
         # A URL to an icon representing this module.
-        IconUri = 'https://gitlab.com/sgkens/NuPSForge/-/blob/main/logo.svg'
+        IconUri      = 'https://raw.githubusercontent.com/sgkens/resources/main/modules/nupsforge/nupsforge-logo-x128.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'https://gitlab.com/sgkens/NuPSForge/-/blob/main/Releases.md'
+        ReleaseNotes = 'https://github.com/sgkens/nupsforge/releases'
 
         # Prerelease string of this module
         # Prerelease = 'alpha1'
@@ -111,7 +111,7 @@ PrivateData = @{
         # ExternalModuleDependencies = @()
 
         # DocsURL
-        DocsURi = 'https://pages.gitlab.io/sgkens/NuPSForge/'
+        DocsURi = 'https://pages.gitlab.io/sgkens/NuPSForge'
 
         # MailingListUrl
         MailingListUri = ''
