@@ -4,25 +4,22 @@
 #>
 $Params = @{
   Type = "feat";
-  Scope = "Module";
-  Description = "Core functionality update pre-release";
+  Scope = "cmdlets";
+  Description = "Implimented cmdlet to handle choco .nupkg generation";
   Notes = @(
-    "Provided a way to create .nuspec file from cmdlet New-NuspecPacakgeFile",
-    "Provided a way to create .nupkg file from cmdlet New-NuspecPacakge",
-    "Included logtatastic as the console logger",
-    "Included shelldock runspace wrapper to excute creation process",
-    "added module meta data",
-    "Added module icon",
-    "added ci-build scripts(Still requires more configuration)"
+    "Added figlet static logo for New-NupkgPackage and New-Chocopackage",
+    "Deleted/moved .ps1 scripts",
+    "Updated logtastic log message to include Choco package creation"
   );
   #Footer=$true
-  GitUser = "sgkens";
+  #GitUser = "sgkens";
   GitGroup = "powershell";
-  # FeatureAddtions = @(
-  #   "Exposes all methods and properties of the Table and Rule class"
-  #   "``New-Object Spectre.Console.Table`` and ``New-Object Spectre.Console.Rule``"
+  FeatureAddtions = @(
+    "Access to New Cmdlet New-ChocoPackage, New-ChocoNupsecFile allowing the creation of comptatable chocolatey packages, instead of using nuget.exe or dotnet nuget Compress-Archive is used and output is a.nupkg file"
+  );
+  # BugFixes = @(
+  #   ""
   # );
-  #BugFixes = @();
   #BreakingChanges = @();
   #FeatureNotes = @();
   #AsString = $true #Default is $true
@@ -35,7 +32,7 @@ $Params = @{
 New-ConventionalCommit @params #| set-commit
 
 # ConventionalCommit with params sent commit
-#New-ConventionalCommit @Params | Set-Commit
+#New-ConventinalCommit @Params | Set-Commit
 
 # ConventionalCommit with params, written to changelog and sent commit
 #New-ConventionalCommit @Params | Format-FusionMD | Update-ChangeLog -logfile .\changelog.md | Set-Commit
