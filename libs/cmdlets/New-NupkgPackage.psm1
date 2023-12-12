@@ -19,6 +19,8 @@ Function New-NupkgPackage() {
     )
 
     try {
+        $logo = Get-Content -Path '.\libs\icon-nuget.txt' -raw
+        [console]::Write("$logo`n")
         $rootpath = (Get-itemProperty -Path $Path).FullName
         $exportPath = (Get-itemProperty -Path $OutPath).FullName 
         
@@ -31,31 +33,35 @@ Function New-NupkgPackage() {
 
             break;
         }
-        Write-LogTastic -Message "[{ct:magenta:nuget}]|-@{pt:{run=pack}} @{pt:{Package=$($nuspecfile.package.metadata.id)}} @{pt:{Version=$($nuspecfile.package.metadata.version)}}" -Name "pmm" -Type "action"
-        Write-LogTastic -Message "Creating {ct:magenta:nupkg} package from {ct:magenta:nuspec} file" -Name "pmm" -Type "action" -Submessage      
-        Write-LogTastic -Message "Checking {ct:yellow:nuget} Package Manager" -Name "pmm" -Type "info" -Submessage
+        Write-LogTastic -Message "[{ct:magenta:nuget}]|-@{pt:{run=pack}} @{pt:{Package=$($nuspecfile.package.metadata.id)}} @{pt:{Version=$($nuspecfile.package.metadata.version)}}" `
+                        -Name $global:LOGTASTIC_MOD_NAME `
+                        -Type "action"
+        Write-LogTastic -Message "Creating {ct:magenta:nupkg} package from {ct:magenta:nuspec} file" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage      
+        Write-LogTastic -Message "Checking {ct:yellow:nuget} Package Manager" -Name $global:LOGTASTIC_MOD_NAME -Type "info" -Submessage
 
 
         $nuget = Get-Command -Name nuget -ErrorAction SilentlyContinue
         if ($nuget.source.length -eq 0) { 
             throw [System.Exception]::new("Nuget package manager not found @{pt:{DownloadFrom=https://www.nuget.org/downloads}}", "nuget.ex not function PATH System variable"); 
         }
-        Write-LogTastic -Message "Done" -Name "pmm" -Type "complete" -Submessage
+        Write-LogTastic -Message "Done" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
     }
     catch [System.Exception] {
-        Write-LogTastic -Message "$($_.Exception.Message)" -Name "pmm" -Type "Error" -submessage
+        Write-LogTastic -Message "$($_.Exception.Message)" -Name $global:LOGTASTIC_MOD_NAME -Type "Error" -submessage
     }
-    Write-LogTastic -Message "[{ct:green:PackPackage}]" -Name "pmm" -Type "action" -submessage
-
+    Write-LogTastic -Message "[{ct:green:PackPackage}]" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -submessage
+    $PackageName = "$($nuspecfile.package.metadata.id).$($nuspecfile.package.metadata.version).nupkg"
     New-ShellDock -Ql -ScriptBlock {
         nuget pack -build $args.rootpath -OutputDirectory $args.exportPath
     } -Arguments ([PSObject]@{rootpath = $rootpath; exportPath = $exportPath })
 
     # - TotalProcessorTime : 00:00:00.6250000
     # - id : 26036
-    Write-LogTastic -Message "response -OutputDirectory $exportPath" -Name "pmm" -Type "Success" -Submessage
-    Write-LogTastic -Message "Nupkg Package created" -Name "pmm" -Type "Success"
-    Write-LogTastic -Message "@{pt:{package=$exportPath`\$($nuspecfile.package.metadata.id)`.nupkg}}" -Name "pmm" -Type "Complete" -Submessage
-    Write-LogTastic -Message "Complete" -Name "pmm" -Type "Complete"
+    Write-LogTastic -Message "response -OutputDirectory $exportPath" -Name $global:LOGTASTIC_MOD_NAME -Type "Success" -Submessage
+    Write-LogTastic -Message "Nupkg Package created" -Name $global:LOGTASTIC_MOD_NAME -Type "Success"
+    Write-LogTastic -Message "@{pt:{package=$exportPath`\$PackageName}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Complete" -Submessage
+    Write-LogTastic -Message "Complete" -Name $global:LOGTASTIC_MOD_NAME -Type "Complete"
+
+    ""
 }
 Export-ModuleMember -Function New-NupkgPackage

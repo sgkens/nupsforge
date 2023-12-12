@@ -15,9 +15,9 @@ function New-ChocoNuspecFile {
         [string]$ModuleName,
         [Parameter(Mandatory = $true)]
         [string]$ModuleVersion,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true)]
         [string]$path,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true)]
         [string]$Author,
         [Parameter(Mandatory = $true)]
         [string]$Description,
@@ -51,7 +51,7 @@ function New-ChocoNuspecFile {
         [string]$Summary
     )
 
-    Write-LogTastic -Message "Generating @{pt:{module=$ModuleName}} @{pt:{package=$company`.$ModuleName}}" -Name "nsf" -Type "action"
+    Write-LogTastic -Message "Generating @{pt:{module=$ModuleName}} @{pt:{package=$company`.$ModuleName.$ModuleVersion.nupkg}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
     try {
         if($licenseAcceptance){$Acceptance='true'}else{$Acceptance='false'}
         # XML Here-String .nuspec file template for powershell modules 
@@ -70,7 +70,7 @@ function New-ChocoNuspecFile {
     <!-- Owners contain text that appears directly on the Chocolatey package page -->
     <owners>$Author</owners>
     <!-- The description for the chocolatey package -->
-    <description>$Description.</description>
+    <description>$($Description)</description>
     <!-- The summary for the chocolatey package -->
     <summary>$Summary</summary>
     <!-- Project URL provides a link for the Chocolatey package page -->
@@ -108,21 +108,21 @@ function New-ChocoNuspecFile {
   </files>
 </package>
 "@
-    Write-LogTastic -Message "Done" -Name "nsf" -Type "success" -submessage
+        Write-LogTastic -Message "Done" -Name $global:LOGTASTIC_MOD_NAME -Type "success" -submessage
     }
     catch [System.Exception] {
-        Write-LogTastic -Message "[NuspecPackageFile] Template Create Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name "nsf" -Type "error"
+        Write-LogTastic -Message "[NuspecPackageFile] Template Create Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name $global:LOGTASTIC_MOD_NAME -Type "error"
     }
-    Write-LogTastic -Message "Creating File Manifest" -Name "nsf" -Type "Info"
-    Write-LogTastic -Message "Adding files to manifest to @{pt:{xmlNodePath=nuspec.package.files.file}}" -Name "nsf" -Type "action" -Submessage
+    Write-LogTastic -Message "Creating File Manifest" -Name $global:LOGTASTIC_MOD_NAME -Type "Info"
+    Write-LogTastic -Message "Adding files to manifest to @{pt:{xmlNodePath=nuspec.package.files.file}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
     #! check for readme.txt and icon.png 
     # Update and add all files to the manifest
     try {
-        Write-LogTastic -Message "Getting Directory Property" -Name "nsf" -Type "Info" -Submessage
+        Write-LogTastic -Message "Getting Directory Properties" -Name $global:LOGTASTIC_MOD_NAME -Type "Info" -Submessage
         $DirectoryProperty = Get-itemProperty -Path $path
     }
     catch [System.Exception] {
-        Write-LogTastic -Message "Get-ItemProperty Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name "nsf" -Type "error"
+        Write-LogTastic -Message "Get-ItemProperty Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name $global:LOGTASTIC_MOD_NAME -Type "error"
         return
     }
 
@@ -133,22 +133,21 @@ function New-ChocoNuspecFile {
             $RelativePath = $_.fullname.Replace($DirectoryProperty.FullName, "").TrimStart("\")
             try {
                 # replace souce path with empty string to get relative path 
-                if ($_.name -match "(i|I)(con.png)") {
-                    Write-LogTastic -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name "nsf" -Type "complete" -Submessage
+                if($_.name -match "(I|i)(con.png)") {
+                    Write-LogTastic -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
                     # add readme.txt and icon.png to the root of the package as default requirements
                     $fileElement = $nuspec.CreateElement("file")
                     $fileElement.SetAttribute("target", $RelativePath)
                     $fileElement.SetAttribute("src", $RelativePath)
                 }
-                elseif ($_.name -match "(r|R)(eadme.txt)") {
-                    Write-LogTastic -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name "nsf" -Type "complete" -Submessage
+                elseif($_.name -match "(R|r)(eadme|EADME).md") {
+                    Write-LogTastic -Message "{ct:blue:required} @{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
                     # add readme.txt and icon.png to the root of the package as default requirements
                     $fileElement = $nuspec.CreateElement("file")
                     $fileElement.SetAttribute("target", $RelativePath)
-                    $fileElement.SetAttribute("src", $RelativePath)                  
-                }
-                else {
-                    Write-LogTastic -Message "@{pt:{path=$RelativePath}}" -Name "nsf" -Type "complete" -Submessage
+                    $fileElement.SetAttribute("src", $RelativePath)       
+                }else{
+                    Write-LogTastic -Message "@{pt:{path=$RelativePath}}" -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
                     # Add files to the manifest in root path
                     $fileElement = $nuspec.CreateElement("file")
                     $fileElement.SetAttribute("target", $RelativePath)
@@ -158,29 +157,29 @@ function New-ChocoNuspecFile {
                 $nuspec.SelectSingleNode("//files").AppendChild($fileElement) | Out-Null
             }
             catch [System.Exception] {
-                Write-LogTastic -Message "Get-ItemProperty Failed Error: $($_.Exception.Message) " -Name "nsf" -Type "error"
-                #break;
+                Write-LogTastic -Message "Get-ItemProperty Failed Error: $($_.Exception.Message) " -Name $global:LOGTASTIC_MOD_NAME -Type "error"
+                break;
             }
         }
     }
-    Write-LogTastic -Message "Finished." -Name "nsf" -Type "complete" -Submessage
+    Write-LogTastic -Message "Finished." -Name $global:LOGTASTIC_MOD_NAME -Type "complete" -Submessage
     
     # Add dependancies to the manifest
     # xmlnode nuspec.package.metadata.dependencies.dependency
     if ($dependencies.Count -ne 0) {
         try {
-            Write-LogTastic -Message "Adding dependancies to manifest @{pt:{xmlNodePath=nuspec.package.metadata.dependencies.dependency}}" -Name "nsf" -Type "action"
+            Write-LogTastic -Message "Adding dependancies to manifest @{pt:{xmlNodePath=nuspec.package.metadata.dependencies.dependency}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
             foreach ($dependency in $dependencies) {
-                Write-LogTastic -Message "Dependency > @{pt:{Name=$($dependency.id)}} @{pt:{Version=$($dependency.version)}}" -Name "nsf" -Type "Action" -Submessage
+                Write-LogTastic -Message "Dependency > @{pt:{Name=$($dependency.id)}} @{pt:{Version=$($dependency.version)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Action" -Submessage
                 $dependencyElement = $nuspec.CreateElement("dependency")
                 $dependencyElement.SetAttribute("id", $dependency.id)
                 $dependencyElement.SetAttribute("version", $dependency.version)
                 $nuspec.SelectSingleNode("//dependencies").AppendChild($dependencyElement) | Out-Null
             }
-            Write-LogTastic -Message "Done." -Name "nsf" -Type "success" -Submessage
+            Write-LogTastic -Message "Done." -Name $global:LOGTASTIC_MOD_NAME -Type "success" -Submessage
         }
         catch [system.exception] {
-            Write-LogTastic -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name "nsf" -Type "Error" -Submessage
+            Write-LogTastic -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Error" -Submessage
         }
     }
 
@@ -193,13 +192,13 @@ function New-ChocoNuspecFile {
  
     # output the nuspec file
     try {
-        Write-LogTastic -Message "Exporting .nuspec @{pt:{File=$outpath\$company`.$modulename`.nuspec}}" -Name "nsf" -Type "action"
+        Write-LogTastic -Message "Exporting .nuspec @{pt:{File=$outpath\$company`.$modulename`.nuspec}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
         $nuspec.Save("$path\$ModuleName`.nuspec")
-        Write-LogTastic -Message "Exported" -Name "nsf" -Type "Complete"
-        Write-LogTastic -Message "@{pt:{Path=$PWD`\$company`.$modulename`.nuspec}}" -Name "nsf" -Type "info" -Submessage
+        Write-LogTastic -Message "Exported" -Name $global:LOGTASTIC_MOD_NAME -Type "Complete"
+        Write-LogTastic -Message "@{pt:{Path=$PWD`\$company`.$modulename`.nuspec}}" -Name $global:LOGTASTIC_MOD_NAME -Type "info" -Submessage
     }
     catch [system.exception] {
-        Write-LogTastic -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name "nsf" -Type "Error" -Submessage
+        Write-LogTastic -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Error" -Submessage
     }
     
 }

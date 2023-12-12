@@ -18,7 +18,7 @@
         - #? https://marketplace.visualstudio.com/items?itemName=bierner.colorful-comments
 TODO 
 #>
-Function New-ShellDock(){
+Function New-ShellDock() {
     <#
         To achieve asynchronous execution and retrieve the output and errors, 
         we can use the InvokeAsync() method of the Pipeline object, but you 
@@ -29,35 +29,40 @@ Function New-ShellDock(){
     [alias("nsd")]
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [Scriptblock]$ScriptBlock,
-        [Parameter(Mandatory=$false,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [String]$Name,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [PSobject]$Arguments,
-        [Parameter(Mandatory=$false,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
-        [switch]$Ql = $false
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [switch]$Ql = $false,
+        [Parameter(Mandatory = $false)]
+        [string]$qlname
     )
-    Begin{
+    Begin {
+        if (!$qlname) { $qlname = "shd" }
         $tadpol = New-TPObject # Create a new TadPol Object
         # Create Instances or powershell and RunSpacefactory
         $ShellDock = [RunSpacefactory]::CreateRunSpace()
         $pwsh = [powershell]::Create()
         $ShellDock.OpenAsync()
         # Set the name of the RunSpace
-        if($name){
+        if ($name) {
             $ShellDock.name = $Name
-        }else{
+        }
+        else {
             $unq_name = "ShellDock-#$([System.Guid]::NewGuid().ToString().Split("-")[0])"
             $ShellDock.name = $unq_name
         }
-        if($ql){Write-LogTastic -name "shd" -Message "[{ct:yellow:runspace}] @{pt:{$($ShellDock.Name)=Create" -Type "Action" }
-        if($ShellDock.RunspaceStateInfo.state -eq "Opened"){
-            if($ql){Write-LogTastic -name "shd" -Message "@{pt:{$($ShellDock.Name)=$($ShellDock.RunspaceStateInfo.state)}}" -Type "Info" -submessage}
-        }else{
+        if ($ql) { Write-LogTastic -name $qlname -Message "[{ct:yellow:runspace}] @{pt:{$($ShellDock.Name)=Create" -Type "Action" }
+        if ($ShellDock.RunspaceStateInfo.state -eq "Opened") {
+            if ($ql) { Write-LogTastic -name $qlname -Message "@{pt:{$($ShellDock.Name)=$($ShellDock.RunspaceStateInfo.state)}}" -Type "Info" -submessage }
+        }
+        else {
             # Check if the RunSpace is opened
-            while($ShellDock.RunspaceStateInfo.state -like "Opening"){
-                if($ql){Write-LogTastic -name "shd" -Message "Connecting to {ct:yellow:$($ShellDock.Name)}" -Type "Info" -submessage} 
+            while ($ShellDock.RunspaceStateInfo.state -like "Opening") {
+                if ($ql) { Write-LogTastic -name $qlname -Message "Connecting to {ct:yellow:$($ShellDock.Name)}" -Type "Info" -submessage } 
                 [Console]::SetCursorPosition(0, ([Console]::GetCursorPosition().Item2 - 1 ) );
                 Start-Sleep -Seconds 1
             }
@@ -69,7 +74,7 @@ Function New-ShellDock(){
         $pwsh.AddScript($ScriptBlock) | out-null
         $pwsh.AddArgument($Arguments) | out-null
     }
-    process{
+    process {
 
         # Asynchronously invoke the pipeline
         $Response = $pwsh.BeginInvoke()
@@ -81,12 +86,12 @@ Function New-ShellDock(){
         $TadPol = New-TPObject
         while ($Response.IsCompleted -ne $true) {
             # Do additional work while waiting for the pipeline to complete
-            Write-LogTastic -name "shd" -message "[$($TadPol.loader("bowls",'1','yellow'))] Executing ShellDock [runspace]::$($ShellDock.Name)..." -Type Action -SubMessage
+            Write-LogTastic -name $qlname -message "[$($TadPol.loader("bowls",'1','yellow'))] Executing ShellDock [runspace]::$($ShellDock.Name)..." -Type Action -SubMessage
             [Console]::SetCursorPosition(0, ([Console]::GetCursorPosition().Item2 - 1 ) );
             Start-Sleep -Milliseconds 200
         }
-        if($response.IsCompleted -eq $true){
-            Write-LogTastic -name "shd" -message "[$($tadpol.CompleteChar("bowls"))] Executing complete [runspace]::$($ShellDock.Name)" -Type Complete -SubMessage
+        if ($response.IsCompleted -eq $true) {
+            Write-LogTastic -name $qlname -message "[$($tadpol.CompleteChar("bowls"))] Executing complete [runspace]::$($ShellDock.Name)" -Type Complete -SubMessage
         }
 
         # Retrieve the output
@@ -103,8 +108,8 @@ Function New-ShellDock(){
         }
         # Output the command output to the PowerShell console
         Write-Output $output
-        }
-    end{
+    }
+    end {
         # Close the ShellDock
         $ShellDock.closeAsync()
         $ShellDock.Dispose()
