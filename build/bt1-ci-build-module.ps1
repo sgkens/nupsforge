@@ -9,8 +9,8 @@ Build-Module -SourcePath .\ `
              -DestinationPath .\dist `
              -Name $modulename `
              -IncrementVersion None `
-             -FilesToCopy "nupsforge.psm1","nupsforge.psd1","LICENSE","icon.png", 'readme.md' `
-             -ExcludedFiles "Issue#1.txt" `
+             -FilesToCopy "nupsforge.psm1","nupsforge.psd1","LICENSE","icon.png", "readme.md" `
+             -ExcludedFiles "Issue#1.txt","example-package.ps1","example.ps1" `
              -FoldersToCopy "libs","tools" `
              -Manifest `
              -Version $AutoVersion
