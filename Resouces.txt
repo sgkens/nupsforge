@@ -1,2 +1,0 @@
- * Create a package *
-https://learn.microsoft.com/en-us/nuget/create-packages/creating-a-package
