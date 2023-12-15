@@ -1,5 +1,4 @@
-# <img width="25" src="https://raw.githubusercontent.com/sgkens/resources/main/modules/nupsforge/dist/v1/nupsforge-logo-x128.png"/>  **NuPSForge**
-### *PowerShell Module*
+# <img width="25" src="https://raw.githubusercontent.com/sgkens/resources/main/modules/nupsforge/dist/v1/nupsforge-logo-x128.png"/>  **NuPSForge** 
 
 <!--license-->
 <a href="https://github.com/sgkens/nupsforge/">
@@ -7,25 +6,29 @@
 <!--Code Factor-->
 <a href="https://www.codefactor.io/repository/github/sgkens/nupsforge/">
   <img src="https://www.codefactor.io/repository/github/sgkens/nupsforge/badge"></a>
-<!--Choco-->
-<a href="https://community.chocolatey.org/packages/davilion.nupsforge">
-  <img src="https://img.shields.io/chocolatey/dt/davilion.nupsforge?label=Choco"></a>
-<!--[psgallary]-->
-<a href="https://www.powershellgallery.com/packages/nupsforge">
-  <img src="https://img.shields.io/powershellgallery/dt/nupsforge?label=psgallary"></a>
+<!--coverage-->
+<a href="https://coveralls.io/github/sgkens/nupsforge">
+  <img src="https://img.shields.io/coverallsCoverage/github/sgkens/nupsforge?branch=main"></a>
+
 
 NuPSForge help with the creation of `.nupkg` for powershell modules and scripts, for deployment to a nuget repositories, such as the **Powershell Gallary**,**Chocolatey**, **proget**, and **Gitlab|Github** Packages Repositories.
 
+|BUILD|RELEASES|
+|-|-|
+|<a href="https://gitlab.lab.davilion.online/powershell/commitfusion/-/pipelines"><img src="https://gitlab.lab.davilion.online/powershell/commitfusion/badges/main/pipeline.svg"></a>|<a href="https://gitlab.lab.davilion.online/powershell/ccommits/-/releases"><img src="https://gitlab.lab.davilion.online/powershell/commitfusion/-/badges/release.svg"></a>|
+|<a href="https://gitlab.lab.davilion.online/powershell/commitfusion/-/pipelines"><img src="https://gitlab.lab.davilion.online/powershell/commitfusion/badges/main/pipeline.svg"></a>|
 
-## 🟪 Cmdlets
+## 🟪 Cmdlets/Functions
 
 #### 🔹**New-ChocoNuspecFile**
 
 Generating a **.nuspec** from a *ModuleManifest* file `Test-ModuleManifest -Path "Path"`, `New-ChocoNuspecFile` outputs `$modulename.companyname.nuspec`
 
 > NOTE!
-> Extra properties are added to the `.nuspec` file, such as `projectSourceUrl`, `docsUrl`, `bugTrackerUrl`, `LicenseUrl`, `IconUrl`, `mailingListUrl`, `bugTrackerUrl`, `licenseUrl`, `projectSourceUrl`, `projectUrl`, `iconUrl`, `
-> In the .psd1 manifest file there are added to $`ModuleManifest.PrivateData.PSData`
+
+Extra properties are added to the `.nuspec` file. Such as `projectSourceUrl`, `docsUrl`, `bugTrackerUrl`, `LicenseUrl`, `IconUrl`, `mailingListUrl`, `bugTrackerUrl`, `licenseUrl`, `projectSourceUrl`, `projectUrl`, `iconUrl`.
+
+With `.psd1` manifest file they can be added to `$ModuleManifest.PrivateData.PSData` if pulling from manifest.
 
 ```powershell
 $NuSpecParamsChoco = @{
@@ -34,13 +37,13 @@ $NuSpecParamsChoco = @{
   ModuleVersion    = $ModuleManifest.Version -replace "\.\d+$", "" # remove the extra .0 as semver has 0.0.0 and powershell 0.0.0.0
   Author           = $ModuleManifest.Author
   Description      = $ModuleManifest.Description
-  ProjectUrl       = $ModuleManifest.PrivateData.PSData.ProjectUri
-  IconUrl          = $ModuleManifest.PrivateData.PSData.IconUri
-  docsUrl          = $ModuleManifest.PrivateData.PSData.docsUri
-  projectSourceUrl = $ModuleManifest.PrivateData.PSData.projectSourceUri 
-  MailingListUrl   = $ModuleManifest.PrivateData.PSData.MailingListUri
-  bugTrackerUrl    = $ModuleManifest.PrivateData.PSData.BugTrackerUri
-  LicenseUrl       = $ModuleManifest.PrivateData.PSData.LicenseUri
+  ProjectUrl       = $ModuleManifest.PrivateData.PSData.ProjectUrl
+  IconUrl          = $ModuleManifest.PrivateData.PSData.IconUrl
+  docsUrl          = $ModuleManifest.PrivateData.PSData.docsUrl
+  projectSourceUrl = $ModuleManifest.PrivateData.PSData.projectSourceUrl
+  MailingListUrl   = $ModuleManifest.PrivateData.PSData.MailingListUrl
+  bugTrackerUrl    = $ModuleManifest.PrivateData.PSData.BugTrackerUrl
+  LicenseUrl       = $ModuleManifest.PrivateData.PSData.LicenseUrl
   ReleaseNotes     = $ModuleManifest.PrivateData.PSData.ReleaseNotes
   License          = "MIT"
   company          = $ModuleManifest.CompanyName
@@ -57,13 +60,13 @@ New-ChocoNuspecFile -Path .\dist\$ModuleName `
                     -ModuleVersion $ModuleManifest.Version -replace "\.\d+$", "" # remove the extra .0 as semver has 0.0.
                     -Author $ModuleManifest.Author `
                     -Description $ModuleManifest.Description `
-                    -ProjectUrl $ModuleManifest.PrivateData.PSData.ProjectUri `
-                    -IconUrl $ModuleManifest.PrivateData.PSData.IconUri `
-                    -docsUrl $ModuleManifest.PrivateData.PSData.docsUri `
-                    -projectSourceUrl $ModuleManifest.PrivateData.PSData.projectSourceUri `
-                    -MailingListUrl $ModuleManifest.PrivateData.PSData.MailingListUri `
-                    -bugTrackerUrl $ModuleManifest.PrivateData.PSData.BugTrackerUri `
-                    -LicenseUrl $ModuleManifest.PrivateData.PSData.LicenseUri `
+                    -ProjectUrl $ModuleManifest.PrivateData.PSData.ProjectUrl `
+                    -IconUrl $ModuleManifest.PrivateData.PSData.IconUrl `
+                    -docsUrl $ModuleManifest.PrivateData.PSData.docsUrl `
+                    -projectSourceUrl $ModuleManifest.PrivateData.PSData.projectSourceUrl `
+                    -MailingListUrl $ModuleManifest.PrivateData.PSData.MailingListUrl `
+                    -bugTrackerUrl $ModuleManifest.PrivateData.PSData.BugTrackerUrl `
+                    -LicenseUrl $ModuleManifest.PrivateData.PSData.LicenseUrl `
                     -ReleaseNotes $ModuleManifest.PrivateData.PSData.ReleaseNotes `
                     -License "MIT" `
                     -company $ModuleManifest.CompanyName `
@@ -99,16 +102,16 @@ New-NuspecPackageFile -Path "path/to/folder"
 
 # or ----------------------
 
-New-NuspecPackageFile -Path "Path" ` # [string]
-                      -ModuleName "ModuleName" ` # [string]
-                      -ModuleVersion "ModuleVersion" ` # [string]
-                      -Author "Author" ` # [string]
-                      -Description "Description" ` # [string]
-                      -ProjectUrl "ProjectUrl" ` # [string]
-                      -License "License" ` # [string]
-                      -Company "company" ` # [string]
-                      -Tags "Tags" ` # [string[]]
-                      -Dependencies "dependencies" ` # [string[]]
+New-NuspecPackageFile -Path "Path"
+                      -ModuleName "ModuleName"
+                      -ModuleVersion "ModuleVersion"
+                      -Author "Author"
+                      -Description "Description"
+                      -ProjectUrl "ProjectUrl"
+                      -License "License"
+                      -Company "company"
+                      -Tags "Tags"
+                      -Dependencies "dependencies"
                       -LicenseAcceptance $false
 
 ```
@@ -118,9 +121,12 @@ New-NuspecPackageFile -Path "Path" ` # [string]
 Create a **Chocolatey** nuget package from `.nuspec` file `New-ChocoPackage` looks for `rootfoldername.nuspec` file in your root directory.
 
 > NOTE!
-> nuget is not used for choco packages as choco extends the xml 2016 ***nuspec schema specifications*** running `nuget -build -pack .` will return and error as extra `nuspec.package.*` contains extra unsupported fields
-> xmlns: <http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd>
-> `Compress-Archive` is used to output .nupkg
+> 🖋 `New-ChocoPackage` uses **choco.exe** to create the **package.nupkg**
+> 🖋 choco must be installed and be callable from cli
+> 🖋 Runs`Choco Pack --outdirectory $outdir`
+
+> *How-to!* \
+> Installing *Chocolatey* Package Manager [**How to Install**](https)  [🧷chocolatey.org/install](https://chocolatey.org/install)
 
 🧪 **Example**:
 
@@ -129,11 +135,14 @@ New-ChocoPackage -path .\dist\ModuleName  -outpath .\dist\choco
 ```
 
 #### 🔹New-NupkgPackage
+
 Create an nuget package from `.nuspec` file `New-NupkgPackage` looks for `rootfoldername.nuspec` file in your root directory.
 
 > NOTE!
-> `New-NupkgPackage` using nuget.exe to create the package, nuget.exe is required to be installed on your system.
-> `runs nuget -build -pack .`
+> 🖋`New-NupkgPackage` uses **nuget.exe** to create the **package.nupkg**
+> 🖋 nuget must be installed and be callable from cli
+> 🖋 dotnet sdk `dotnet nuget` is also compatable
+> 🖋 Runs `nuget -build -pack .`
 
 ```powershell
 New-NupkgPackage -path .\dist\ModuleName  -outpath .\dist\nuget
@@ -188,10 +197,9 @@ choco install davilion.nupsforge
 Import-Module -Name nupsforge
 ```
 
-> *How-to!* \
-> Installing *Chocolatey* Package Repository
-[**How to Install**](https)  [🧷https://chocolatey.org/install](https://chocolatey.org/install)
-
 ## 🟧 Requirements
-🔹TadPal \
-🔹LogTastic
+
+🔹**TadPal** : <https://github.com/sgkens/tadpol> *Installed with Module*
+🔹**LogTastic**: <https://github.com/sgkens/logtastic> *Installed with Module*
+🔹**Nuget** : Be available in your environtment $PATH|PATH
+🔹**Choco** : Be available in your environtment $PATH|PATH
