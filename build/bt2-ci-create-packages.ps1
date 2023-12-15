@@ -1,5 +1,12 @@
 import-module -name .\
 
+#---CONFIG----------------------------
+# Nupkg Powershell Forge
+$ModuleName = "nupsforge"
+
+$ModuleManifest = Test-ModuleManifest -path .\dist\$modulename\$modulename.psd1
+#---CONFIG----------------------------
+
 # ? Powershell Gallery Description Does not support markdown indenting
 # ? But Nuget and Choco Does
 $Additional_descriptions = @'
@@ -21,13 +28,13 @@ New-ChocoNuspecFile -Path .\dist\$ModuleName
                     -ModuleVersion $ModuleManifest.Version -replace "\.\d+$", "" # remove the extra .0 as semver has 0.0.
                     -Author $ModuleManifest.Author
                     -Description $ModuleManifest.Description
-                    -ProjectUrl $ModuleManifest.PrivateData.PSData.ProjectUri
-                    -IconUrl $ModuleManifest.PrivateData.PSData.IconUri
-                    -docsUrl $ModuleManifest.PrivateData.PSData.docsUri
-                    -projectSourceUrl $ModuleManifest.PrivateData.PSData.projectSourceUri
-                    -MailingListUrl $ModuleManifest.PrivateData.PSData.MailingListUri
-                    -bugTrackerUrl $ModuleManifest.PrivateData.PSData.BugTrackerUri
-                    -LicenseUrl $ModuleManifest.PrivateData.PSData.LicenseUri
+                    -ProjectUrl $ModuleManifest.PrivateData.PSData.ProjectUrl
+                    -IconUrl $ModuleManifest.PrivateData.PSData.IconUrl
+                    -docsUrl $ModuleManifest.PrivateData.PSData.docsUrl
+                    -projectSourceUrl $ModuleManifest.PrivateData.PSData.projectSourceUrl
+                    -MailingListUrl $ModuleManifest.PrivateData.PSData.MailingListUrl
+                    -bugTrackerUrl $ModuleManifest.PrivateData.PSData.BugTrackerUrl
+                    -LicenseUrl $ModuleManifest.PrivateData.PSData.LicenseUrl
                     -ReleaseNotes $ModuleManifest.PrivateData.PSData.ReleaseNotes
                     -License "MIT"
                     -company $ModuleManifest.CompanyName
@@ -101,8 +108,8 @@ $NuSpecParams = @{
   ModuleName       = $ModuleName
   ModuleVersion    = $ModuleManifest.Version -replace "\.\d+$", "" # remove the extra .0 as semver has 0.0.0 and powershell 0.0.0.0
   Author           = $ModuleManifest.Author
-  Description      = $Additional_descriptions -replace '```','```' -replace '\`','``'
-  ProjectUrl       = $ModuleManifest.PrivateData.PSData.ProjectUri
+  Description      = $ModuleManifest.Description #$Additional_descriptions -replace '```','```' -replace '\`','``'
+  ProjectUrl       = $ModuleManifest.PrivateData.PSData.ProjectUrl
   License          = "MIT"
   company          = $ModuleManifest.CompanyName
   Tags             = $ModuleManifest.Tags
@@ -111,33 +118,9 @@ $NuSpecParams = @{
 }
 # NuGet- Proget/GitlabSE
 New-NuspecPackageFile @NuSpecParams
+New-VerificationFile -Path .\dist\$modulename  # Output to '\tools\VERIFICATIONS.txt' by default
 Start-sleep -Seconds 1 # Wait for file to be created
 New-NupkgPackage -path .\dist\$ModuleName  -outpath .\dist\nuget
-
-# Chocolatey Supports markdown in the description field so create a new nuspec file with additional descriptions in markdown
-$NuSpecParamsChoco = @{
-  path             = ".\dist\$ModuleName"
-  ModuleName       = $ModuleName
-  ModuleVersion    = $ModuleManifest.Version -replace "\.\d+$", "" # remove the extra .0 as semver has 0.0.0 and powershell 0.0.0.0
-  Author           = $ModuleManifest.Author
-  Description      = $Additional_descriptions -replace '```','```' -replace '\`','``'
-  ProjectUrl       = $ModuleManifest.PrivateData.PSData.ProjectUri
-  IconUrl          = $ModuleManifest.PrivateData.PSData.IconUri
-  docsUrl          = $ModuleManifest.PrivateData.PSData.docsUri
-  projectSourceUrl = $ModuleManifest.PrivateData.PSData.projectSourceUri 
-  MailingListUrl   = $ModuleManifest.PrivateData.PSData.MailingListUri
-  bugTrackerUrl    = $ModuleManifest.PrivateData.PSData.BugTrackerUri
-  LicenseUrl       = $ModuleManifest.PrivateData.PSData.LicenseUri
-  ReleaseNotes     = $ModuleManifest.PrivateData.PSData.ReleaseNotes
-  License          = "MIT"
-  company          = $ModuleManifest.CompanyName
-  Tags             = $ModuleManifest.Tags
-  dependencies     = $ModuleManifest.ExternalModuleDependencies
-  LicenseAcceptance = $false
-}
-New-ChocoNuspecFile @NuSpecParamsChoco
-Start-sleep -Seconds 1 # Wait for file to be created
-New-ChocoPackage -path .\dist\$ModuleName  -outpath .\dist\choco
 
 
 # Create Zip With .nuspec file for PSGallery
@@ -146,3 +129,29 @@ New-ChocoPackage -path .\dist\$ModuleName  -outpath .\dist\choco
 [console]::write( "output: .\dist\psgal\$zipFileName `n" )
 $zipFileName = "$($NuSpecParams.ModuleName).zip"
 compress-archive -path .\dist\$ModuleName\* -destinationpath .\dist\psgal\$zipFileName -compressionlevel optimal -update
+
+
+# Chocolatey Supports markdown in the description field so create a new nuspec file with additional descriptions in markdown
+$NuSpecParamsChoco = @{
+  path             = ".\dist\$ModuleName"
+  ModuleName       = $ModuleName
+  ModuleVersion    = $ModuleManifest.Version -replace "\.\d+$", "" # remove the extra .0 as semver has 0.0.0 and powershell 0.0.0.0
+  Author           = $ModuleManifest.Author
+  Description      = $Additional_descriptions -replace '```','```' -replace '\`','``'
+  ProjectUrl       = $ModuleManifest.PrivateData.PSData.ProjectUrl 
+  IconUrl          = $ModuleManifest.PrivateData.PSData.IconUrl 
+  docsUrl          = $ModuleManifest.PrivateData.PSData.docsUrl 
+  projectSourceUrl = $ModuleManifest.PrivateData.PSData.projectSourceUrl 
+  MailingListUrl   = $ModuleManifest.PrivateData.PSData.MailingListUrl 
+  bugTrackerUrl    = $ModuleManifest.PrivateData.PSData.BugTrackerUrl 
+  LicenseUrl       = $ModuleManifest.PrivateData.PSData.LicenseUrl 
+  ReleaseNotes     = $ModuleManifest.PrivateData.PSData.ReleaseNotes
+  company          = $ModuleManifest.CompanyName
+  Tags             = $ModuleManifest.Tags
+  dependencies     = $ModuleManifest.ExternalModuleDependencies
+  LicenseAcceptance = $false
+}
+New-ChocoNuspecFile @NuSpecParamsChoco
+New-VerificationFile -Path .\dist\$modulename  # Output to '\tools\VERIFICATIONS.txt' by default
+Start-sleep -Seconds 1 # Wait for file to be created
+New-ChocoPackage -path .\dist\$ModuleName  -outpath .\dist\choco

@@ -19,29 +19,29 @@ if($ModuleManifest){
 
   # Push to ProGet Chocolatey
   if(Get-command choco){
-    write-host "Checking if Chocolatey is installed, skipping install"
-    write-host "Pushing to chocolatey: .\dist\choco\$nupkgFileName"
-    choco push ".\dist\choco\$nupkgFileName" --source $ProGet_chocInstance --apikey $CHOCO_API_KEY
-    write-host "Pushed to chocolatey $nupkgFileName - Complete"
+    [console]::write("Checking if Chocolatey is installed, skipping install`n")
+    [console]::write("Pushing to chocolatey: .\dist\choco\$nupkgFileName`n")
+    choco push ".\dist\choco\$nupkgFileName" --source $ProGet_chocInstance --apikey $ENV:PROGET_API_KEY
+    [console]::write("Pushed to chocolatey $nupkgFileName - Complete`n")
   }
   else{
-    write-host "Chocolatey is not installed, installing Chocolatey"
+    [console]::write("Chocolatey is not installed, installing Chocolatey`n")
     break;
   }
 
   # Push to ProGet Nuget
   if(Get-command nuget.exe){
-    write-host "Checking if Nuget is installed, skipping install"
-    write-host "Pushing to Nuget: .\dist\nuget\$nupkgFileName"
-    nuget push ".\dist\nuget\$nupkgFileName" -source $ProGet_nugetInstace -apikey $CHOCO_API_KEY
-    write-host "Pushed to Nuget $nupkgFileName - Complete"
+    [console]::write("Checking if Nuget is installed, skipping install`n")
+    [console]::write("Pushing to Nuget: .\dist\nuget\$nupkgFileName `n")
+    nuget push ".\dist\nuget\$nupkgFileName" -source $ProGet_nugetInstace -apikey $ENV:PROGET_API_KEY
+    [console]::write("Pushed to Nuget $nupkgFileName - Complete")
   }
   else{
-    write-host "Nuget is not installed, installing Nuget"
+          [console]::write("Nuget is not installed, installing Nuget`n")
     break;
   }
   # # Push to ProGet PSGallery
-  write-host "Pushing to Powershell-Nuget-Proget: .\dist\psgal\$zipFileName"
+  [console]::write("Pushing to Powershell-Nuget-Proget: .\dist\psgal\$zipFileName`n")
 
   # puish to proget pscore repo 'powershell gallery'
   # Publish-Module -Path ".\dist\$zipFileName" -Repository pscore -NuGetApiKey $apikey
@@ -55,10 +55,10 @@ if($ModuleManifest){
   publish-Module `
     -path ".\dist\$ModuleName" `
     -Repository $ProGet_PSGalInstance `
-    -NuGetApiKey $apikey `
-    -projecturi $ModuleManifest.ProjectUri `
-    -licenseuri $ModuleManifest.LicenseUri `
-    -IconUri 'https://gitlab.snowlab.tk/sgkens/resources/-/blob/raw/modules/CommitFusion/dist/v1/ccommits-logo_GitIcon_51.20dpi.png' `
+    -NuGetApiKey $ENV:PROGET_API_KEY `
+    -projecturi $ModuleManifest.PrivateData.PSData.ProjectUrl `
+    -licenseuri $ModuleManifest.PrivateData.PSData.LicenseUrL `
+    -IconUri 'https://raw.githubusercontent.com/sgkens/resources/main/modules/nupsforge/dist/v1/nupsforge-logo-x128.png' `
     -ReleaseNotes $ModuleManifest.ReleaseNotes `
     -Tags $ModuleManifest.Tags `
     -Verbose

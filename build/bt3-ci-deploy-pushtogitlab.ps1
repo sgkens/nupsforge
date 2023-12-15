@@ -9,23 +9,23 @@ $projectid = "183"
 
 $ModuleManifest = Test-ModuleManifest -path ".\dist\$ModuleName\$ModuleName.psd1"
 $SemVerVersion = $ModuleManifest.Version -replace "\.\d+$", ""
-$NugetProjectPath = "api/v4/projects/$projectid/packages/nuget/index.json"
+$NugetProjectPath = "api/v4/projects/$projectid/packages/nuget"
 
 try {
-  Write-host -foregroundcolor yellow "Attempting to Register Gitlab: $gitlab_uri@$Gitlab_Username"
-  dotnet nuget add source $gitlab_uri/$NugetProjectPath --name gitlab --username $GitLab_Username --password $GITLAB_API_KEY
-  Write-host -foregroundcolor green "Complete"
+  [console]::write("Attempting to Register Gitlab: $($gitlab_uri)@$($Gitlab_Username)`n")
+  dotnet nuget add source $gitlab_uri/$NugetProjectPath --name gitlab --username $GitLab_Username --password $ENV:GITLAB_API_KEY
+  [console]::write("Complete`n")
 }
 catch [system.exception] {
-  Write-Host "Failed to push to gitlab"
-  Write-Host $_
+  [console]::write("Failed to add source $($gitlab_uri/$NugetProjectPath) `n")
+  [console]::write("$($_)`n")
 }
 try {
   Write-host -foregroundcolor yellow "Attempting to push $modulename to Gitlab: $gitlab_uri"
   dotnet nuget push .\dist\nuget\$($ModuleManifest.CompanyName).$modulename.$SemVerVersion.nupkg --source gitlab
 }
 catch [system.exception] {
-  Write-Host "Failed to push to gitlab"
-  Write-Host $_
+  [console]::write("Failed to push to gitlab: $($Gitlab_uri)`n")
+  [console]::write("$($_)`n")
 }
 dotnet nuget remove source gitlab
