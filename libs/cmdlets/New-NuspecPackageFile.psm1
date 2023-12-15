@@ -1,13 +1,55 @@
 using module ..\shelldock\New-ShellDock.psm1
-<#  -------------------------------------------------------------------------------------------------------
-/** ******************************************************************************************************* 
-#!   NAME--------: New-NuspecPackageFile Function
-##   AUTHER------: snoonx | psshellstack
-#?   DESCRIPTION-: Creates a new nuspec manifest file for powershell module/nuspec package.      
-*?   DEPENDANCIES: quicklog
-##   BUILD ENV---: BUILD: Powershellcore 7.3.1
-*?   LICENCE-----: MIT 
-** ******************************************************************************************************#>
+<#
+.SYNOPSIS
+    A function that creates a new .nuspec manifest file for a PowerShell module/package.
+
+.DESCRIPTION
+    The New-NuspecPackageFile function generates a .nuspec manifest file for a PowerShell module or package. 
+    It takes in parameters such as the module name, version, path, author, description, project Url, license, tags, company, 
+    dependencies, license acceptance, and release notes. It then generates a .nuspec file with these details, 
+    including the files and dependencies of the module/package. 
+
+.PARAMETER ModuleName
+    The name of the PowerShell module.
+
+.PARAMETER ModuleVersion
+    The version of the PowerShell module.
+
+.PARAMETER path
+    The path where the .nuspec file will be created.
+
+.PARAMETER Author
+    The author of the PowerShell module.
+
+.PARAMETER Description
+    A description of the PowerShell module.
+
+.PARAMETER ProjectUrl
+    The Url of the project associated with the PowerShell module.
+
+.PARAMETER License
+    The license under which the PowerShell module is released.
+
+.PARAMETER Tags
+    Tags associated with the PowerShell module.
+
+.PARAMETER company
+    The company that owns the PowerShell module.
+
+.PARAMETER dependencies
+    Any dependencies that the PowerShell module has.
+
+.PARAMETER LicenseAcceptance
+    A switch that indicates whether license acceptance is required.
+
+.PARAMETER releasenotes
+    Any release notes associated with the PowerShell module.
+
+.EXAMPLE
+    New-NuspecPackageFile -ModuleName "MyModule" -ModuleVersion "1.0.0" -path "C:\MyModule" -Author "John Doe" -Description "This is my module" -ProjectUrl "http://example.com" -License "MIT" -Tags "PS,Module" -company "MyCompany" -dependencies @("Dep1", "Dep2") -LicenseAcceptance -releasenotes "First release"
+
+    This will create a .nuspec file for the module "MyModule" version "1.0.0" in the directory "C:\MyModule". The author is "John Doe", the description is "This is my module", the project Url is "http://example.com", the license is "MIT", the tags are "PS" and "Module", the company is "MyCompany", the dependencies are "Dep1" and "Dep2", license acceptance is required, and the release notes are "First release".
+#>
 function New-NuspecPackageFile {
     [CmdletBinding()]
     param(
@@ -15,19 +57,19 @@ function New-NuspecPackageFile {
         [string]$ModuleName,
         [Parameter(Mandatory = $true)]
         [string]$ModuleVersion,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true)]
         [string]$path,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true)]
         [string]$Author,
         [Parameter(Mandatory = $true)]
         [string]$Description,
         [Parameter(Mandatory = $true)]
         [string]$ProjectUrl,
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $true)]
         [string]$License,
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $true)]
         [string]$Tags,
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $true)]
         [string]$company,
         [Parameter(Mandatory = $false)]
         [array]$dependencies,
@@ -36,8 +78,9 @@ function New-NuspecPackageFile {
         [Parameter(Mandatory = $false)]
         [string]$releasenotes
     )
-
-    Write-LogTastic -Message "Generating @{pt:{module=$ModuleName}} @{pt:{package=$company`.$ModuleName`.$ModuleVersion.nupkg}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
+    $logo = Get-Content -Path '.\libs\icon-nuget.txt' -raw
+    $logo
+    Write-LogTastic -Message "Getting Metadata @{pt:{module=$ModuleName}} @{pt:{package=$company`.$ModuleName`.$ModuleVersion.nupkg}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
     try {
         if($LicenseAcceptance){ $Acceptance = "true" } else { $Acceptance = "false" }
         # XML Here-String .nuspec file template for powershell modules 
@@ -56,7 +99,7 @@ function New-NuspecPackageFile {
     <owners>$Author</owners>
     <!-- The description can be used in package manager UI. Note that thenuget.org gallery uses information you add in the portal. -->
     <description>$Description.</description>
-    <!-- Project URL provides a link for the gallery -->
+    <!-- Project Url provides a link for the gallery -->
     <projectUrl>$ProjectUrl</projectUrl>
     <!-- License information is displayed on the gallery -->
     <license type="expression">$License</license>
@@ -84,7 +127,7 @@ function New-NuspecPackageFile {
     catch [System.Exception] {
         Write-LogTastic -Message "[NuspecPackageFile] Template Create Failed Error: @{pt:{Error=$($_.Exception.Message)}} " -Name $global:LOGTASTIC_MOD_NAME -Type "error"
     }
-    Write-LogTastic -Message "File Manifest" -Name $global:LOGTASTIC_MOD_NAME -Type "Info"
+    Write-LogTastic -Message "Generating File Manifest" -Name $global:LOGTASTIC_MOD_NAME -Type "Info"
     Write-LogTastic -Message "Adding files @{pt:{xmlNodePath=nuspec.package.files.file}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action" -Submessage
     #! check for readme.txt and icon.png 
     # Update and add all files to the manifest
@@ -164,10 +207,10 @@ function New-NuspecPackageFile {
  
     # output the nuspec file
     try {
-        Write-LogTastic -Message "Exporting .nuspec @{pt:{File=$outpath\$company`.$modulename`.nuspec}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
+        Write-LogTastic -Message "Exporting .nuspec @{pt:{File=$outpath\$company.$modulename.nuspec)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
         $nuspec.Save("$path\$ModuleName`.nuspec")
         Write-LogTastic -Message "Exported" -Name $global:LOGTASTIC_MOD_NAME -Type "Complete"
-        Write-LogTastic -Message "@{pt:{Path=$PWD`\$company`.$modulename`.nuspec}}" -Name $global:LOGTASTIC_MOD_NAME -Type "info" -Submessage
+        Write-LogTastic -Message "@{pt:{Path=$outpath\$company.$modulename.nuspec}}" -Name $global:LOGTASTIC_MOD_NAME -Type "info" -Submessage
     }
     catch [system.exception] {
         Write-LogTastic -Message "Error: @{pt:{Error=$($_.Exception.Message)}}" -Name $global:LOGTASTIC_MOD_NAME -Type "Error" -Submessage

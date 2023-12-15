@@ -1,13 +1,57 @@
 using module ..\shelldock\New-ShellDock.psm1
-<#  -------------------------------------------------------------------------------------------------------
-/** ******************************************************************************************************* 
-#!   NAME--------: New-ChocoNuspecFile Function
-##   AUTHER------: snoonx | psshellstack
-#?   DESCRIPTION-: Creates a new nuspec manifest file for powershell module/nuspec package.      
-*?   DEPENDANCIES: quicklog
-##   BUILD ENV---: BUILD: Powershellcore 7.3.1
-*?   LICENCE-----: MIT 
-** ******************************************************************************************************#>
+
+<#
+.SYNOPSIS
+    A function that creates a new .nuspec manifest file for a Chocolatey package.
+
+.DESCRIPTION
+    The New-ChocoNuspecFile function generates a .nuspec manifest file for a Chocolatey package. 
+    It takes in parameters such as the module name, version, path, author, description, project URL, license, tags, company, 
+    dependencies, license acceptance, and release notes. It then generates a .nuspec file with these details, 
+    including the files and dependencies of the package. 
+
+.PARAMETER ModuleName
+    The name of the Chocolatey package.
+
+.PARAMETER ModuleVersion
+    The version of the Chocolatey package.
+
+.PARAMETER path
+    The path where the .nuspec file will be created.
+
+.PARAMETER Author
+    The author of the Chocolatey package.
+
+.PARAMETER Description
+    A description of the Chocolatey package.
+
+.PARAMETER ProjectUrl
+    The URL of the project associated with the Chocolatey package.
+
+.PARAMETER License
+    The license under which the Chocolatey package is released.
+
+.PARAMETER Tags
+    Tags associated with the Chocolatey package.
+
+.PARAMETER company
+    The company that owns the Chocolatey package.
+
+.PARAMETER dependencies
+    Any dependencies that the Chocolatey package has.
+
+.PARAMETER LicenseAcceptance
+    A switch that indicates whether license acceptance is required.
+
+.PARAMETER releasenotes
+    Any release notes associated with the Chocolatey package.
+
+.EXAMPLE
+    New-ChocoNuspecFile -ModuleName "MyPackage" -ModuleVersion "1.0.0" -path "C:\MyPackage" -Author "John Doe" -Description "This is my package" -ProjectUrl "http://example.com" -License "MIT" -Tags "Choco,Package" -company "MyCompany" -dependencies @("Dep1", "Dep2") -LicenseAcceptance -releasenotes "First release"
+
+    This will create a .nuspec file for the package "MyPackage" version "1.0.0" in the directory "C:\MyPackage". The author is "John Doe", the description is "This is my package", the project URL is "http://example.com", the license is "MIT", the tags are "Choco" and "Package", the company is "MyCompany", the dependencies are "Dep1" and "Dep2", license acceptance is required, and the release notes are "First release".
+#>
+
 function New-ChocoNuspecFile {
     [CmdletBinding()]
     param(
@@ -19,24 +63,24 @@ function New-ChocoNuspecFile {
         [string]$path,
         [Parameter(Mandatory = $true)]
         [string]$Author,
+        [parameter(Mandatory = $false)]
+        [string[]]$Owners,
         [Parameter(Mandatory = $true)]
         [string]$Description,
         [Parameter(Mandatory = $true)]
-        [string]$ProjectUrl,
+        [string]$Projecturl,
         [Parameter(Mandatory = $false)]
-        [string]$projectSourceUrl,
+        [string]$projectSourceurl,
         [Parameter(Mandatory = $false)]
-        [string]$MailingListUrl,
+        [string]$MailingListurl,
         [Parameter(Mandatory = $false)]
-        [string]$bugTrackerUrl,
+        [string]$bugTrackerurl,
         [Parameter(Mandatory = $false)]
-        [string]$docsUrl,
+        [string]$docsurl,
         [Parameter(Mandatory = $false)]
-        [string]$IconUrl,
+        [string]$Iconurl,
         [Parameter(Mandatory = $false)]
-        [string]$License,
-        [Parameter(Mandatory = $false)]
-        [string]$LicenseUrl,
+        [string]$Licenseurl,
         [Parameter(Mandatory = $false)]
         [string]$Tags,
         [Parameter(Mandatory = $false)]
@@ -50,10 +94,12 @@ function New-ChocoNuspecFile {
         [Parameter(Mandatory = $false)]
         [string]$Summary
     )
-
+    $logo = Get-Content -Path '.\libs\icon-choco.txt' -raw
+    $logo
     Write-LogTastic -Message "Generating @{pt:{module=$ModuleName}} @{pt:{package=$company`.$ModuleName.$ModuleVersion.nupkg}}" -Name $global:LOGTASTIC_MOD_NAME -Type "action"
     try {
         if($licenseAcceptance){$Acceptance='true'}else{$Acceptance='false'}
+        if(!$owners){$Owners=$author}
         # XML Here-String .nuspec file template for powershell modules 
         # for a nuget package.
         [xml]$nuspec = @"
@@ -74,25 +120,21 @@ function New-ChocoNuspecFile {
     <!-- The summary for the chocolatey package -->
     <summary>$Summary</summary>
     <!-- Project URL provides a link for the Chocolatey package page -->
-    <projectUrl>$ProjectUrl</projectUrl>
+    <projectUrl>$Projecturl</projectUrl>
     <!-- Package icon url Chocolatey package page -->
-    <iconUrl>$iconUrl</iconUrl>
+    <iconUrl>$iconurl</iconUrl>
     <!-- Project Source URL provides a link for the Chocolatey -->
-    <projectSourceUrl>$projectSourceUrl</projectSourceUrl>
+    <projectSourceUrl>$projectSourceurl</projectSourceUrl>
     <!-- Documentation URL provides a link for the software docs -->
     <docsUrl>$docsurl</docsUrl>
     <!-- Mailing List URL provides a link for the software mailing list -->
-    <mailingListUrl>$mailingListUrl</mailingListUrl>
+    <mailingListUrl>$mailingListurl</mailingListUrl>
     <!-- Bug Tracker URL provides a link for the software bug tracker -->
-    <bugTrackerUrl>$bugTrackerUrl</bugTrackerUrl>
-    <!-- License type -->
-    <license type="expression">$License</license>
+    <bugTrackerUrl>$bugTrackerurl</bugTrackerUrl>
     <!-- License URL provides a link for the software license -->
-    <licenseUrl>$LicenseUrl</licenseUrl>
+    <licenseUrl>$Licenseurl</licenseUrl>
     <!-- Tags appear in the gallery and can be used for tag searches -->
     <tags>$Tags</tags>
-    <!-- Icon is used in Visual Studio's package manager UI -->
-    <icon>icon.png</icon>
     <!-- If true, this value prompts the user to accept the license wheninstalling the package. -->   
     <requireLicenseAcceptance>$Acceptance</requireLicenseAcceptance>
     <!-- Any details about this particular release -->
@@ -186,7 +228,7 @@ function New-ChocoNuspecFile {
     # Add Xmlns schema to the root element
     # http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd
     # http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd
-    $nuspec.package.metadata.SetAttribute("xmlns", "http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd")
+    $nuspec.package.metadata.SetAttribute("xmlns", "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd")
     # If true, this value prompts the user to accept the license when installing the package. 
     #nuspec.package.metadata.requireLicenseAcceptance = $requireLicenseAcceptance
  
